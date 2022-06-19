@@ -14,10 +14,19 @@ export default function getTagRange (doc: vsc.TextDocument, pos: vsc.Position): 
 	}
 	if (v && text[i + 1] !== "/") {
 		i += 1;
+		let inQuotes = "";
 		while (v = text[i]) {
-			if (v === ">") {
-				b = i + 1;
-				break;
+			if (inQuotes) {
+				if (v === inQuotes) {
+					inQuotes = "";
+				}
+			} else {
+				if (v === '"' || v === "'") {
+					inQuotes = v;
+				} else if (v === ">") {
+					b = i + 1;
+					break;
+				}
 			}
 			i ++;
 		}
