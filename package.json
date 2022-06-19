@@ -8,17 +8,61 @@
 		"vscode": "^1.68.0"
 	},
 	"categories": [
-		"Other"
+		"Formatters"
 	],
 	"activationEvents": [
-        "onCommand:wrap-tag-attributes.helloWorld"
+		"onCommand:wrapTagAttribs.wrapAttribs",
+		"onCommand:wrapTagAttribs.unwrapAttribs",
+		"onCommand:wrapTagAttribs.toggleAttribs",
+		"onCommand:wrapTagAttribs.wrapStyle",
+		"onCommand:wrapTagAttribs.unwrapStyle",
+		"onCommand:wrapTagAttribs.toggleStyle"
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
 		"commands": [
 			{
-				"command": "wrap-tag-attributes.helloWorld",
-				"title": "Hello World"
+				"command": "wrapTagAttribs.wrapAttribs",
+				"title": "WrapTagAttributes: Attributes - Wrap"
+			},
+			{
+				"command": "wrapTagAttribs.unwrapAttribs",
+				"title": "WrapTagAttributes: Attributes - Unwrap"
+			},
+			{
+				"command": "wrapTagAttribs.toggleAttribs",
+				"title": "WrapTagAttributes: Attributes - Toggle"
+			},
+			{
+				"command": "wrapTagAttribs.wrapStyle",
+				"title": "WrapTagAttributes: Style - Wrap"
+			},
+			{
+				"command": "wrapTagAttribs.unwrapStyle",
+				"title": "WrapTagAttributes: Style - Unwrap"
+			},
+			{
+				"command": "wrapTagAttribs.toggleStyle",
+				"title": "WrapTagAttributes: Style - Toggle"
+			}
+		],
+		"menus": {
+			"editor/title": [
+				{"submenu": "wrapTagAttribs"}
+			],
+			"wrapTagAttribs": [
+				{"command": "wrapTagAttribs.wrapAttribs"  , "group": "1"},
+				{"command": "wrapTagAttribs.unwrapAttribs", "group": "1"},
+				{"command": "wrapTagAttribs.toggleAttribs", "group": "1"},
+				{"command": "wrapTagAttribs.wrapStyle"    , "group": "2"},
+				{"command": "wrapTagAttribs.unwrapStyle"  , "group": "2"},
+				{"command": "wrapTagAttribs.toggleStyle"  , "group": "2"}
+			]
+		},
+		"submenus": [
+			{
+				"id": "wrapTagAttribs",
+				"label": "Wrap Tag Attributes"
 			}
 		]
 	},

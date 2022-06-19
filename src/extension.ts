@@ -1,25 +1,27 @@
-// The module 'vscode' contains the VS Code extensibility API
-// Import the module and reference it with the alias vscode in your code below
-import * as vscode from 'vscode';
+import * as vsc from 'vscode';
 
-// this method is called when your extension is activated
-// your extension is activated the very first time the command is executed
-export function activate(context: vscode.ExtensionContext) {
+import {
+	wrapAttribs,
+	unwrapAttribs,
+	toggleAttribs,
+	wrapStyle,
+	unwrapStyle,
+	toggleStyle,
+} from "./commands";
+
+export function activate(context: vsc.ExtensionContext) {
 	
-	// Use the console to output diagnostic information (console.log) and errors (console.error)
-	// This line of code will only be executed once when your extension is activated
 	console.log('Congratulations, your extension "wrap-tag-attributes" is now active!');
+	const commands = [
+		vsc.commands.registerTextEditorCommand ("wrapTagAttribs.wrapAttribs"  , wrapAttribs  ),
+		vsc.commands.registerTextEditorCommand ("wrapTagAttribs.unwrapAttribs", unwrapAttribs),
+		vsc.commands.registerTextEditorCommand ("wrapTagAttribs.toggleAttribs", toggleAttribs),
+		vsc.commands.registerTextEditorCommand ("wrapTagAttribs.wrapStyle"    , wrapStyle    ),
+		vsc.commands.registerTextEditorCommand ("wrapTagAttribs.unwrapStyle"  , unwrapStyle  ),
+		vsc.commands.registerTextEditorCommand ("wrapTagAttribs.toggleStyle"  , toggleStyle  ),
+	];
 
-	// The command has been defined in the package.json file
-	// Now provide the implementation of the command with registerCommand
-	// The commandId parameter must match the command field in package.json
-	let disposable = vscode.commands.registerCommand('wrap-tag-attributes.helloWorld', () => {
-		// The code you place here will be executed every time your command is executed
-		// Display a message box to the user
-		vscode.window.showInformationMessage('Hello World from wrap-tag-attributes!');
-	});
-
-	context.subscriptions.push(disposable);
+	context.subscriptions.push(...commands);
 }
 
 // this method is called when your extension is deactivated
