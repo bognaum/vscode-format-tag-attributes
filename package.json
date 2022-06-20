@@ -31,7 +31,7 @@
 			},
 			{
 				"command": "wrapTagAttribs.toggleAttribs",
-				"title": "WrapTagAttributes: Attributes - Toggle"
+				"title": "WrapTagAttributes: Toggle - Attributes"
 			},
 			{
 				"command": "wrapTagAttribs.wrapStyle",
@@ -43,7 +43,7 @@
 			},
 			{
 				"command": "wrapTagAttribs.toggleStyle",
-				"title": "WrapTagAttributes: Style - Toggle"
+				"title": "WrapTagAttributes: Toggle - Style"
 			}
 		],
 		"menus": {
@@ -51,12 +51,12 @@
 				{"submenu": "wrapTagAttribs"}
 			],
 			"wrapTagAttribs": [
-				{"command": "wrapTagAttribs.wrapAttribs"  , "group": "1"},
-				{"command": "wrapTagAttribs.unwrapAttribs", "group": "1"},
 				{"command": "wrapTagAttribs.toggleAttribs", "group": "1"},
-				{"command": "wrapTagAttribs.wrapStyle"    , "group": "2"},
-				{"command": "wrapTagAttribs.unwrapStyle"  , "group": "2"},
-				{"command": "wrapTagAttribs.toggleStyle"  , "group": "2"}
+				{"command": "wrapTagAttribs.toggleStyle"  , "group": "1"},
+				{"command": "wrapTagAttribs.wrapAttribs"  , "group": "2"},
+				{"command": "wrapTagAttribs.unwrapAttribs", "group": "2"},
+				{"command": "wrapTagAttribs.wrapStyle"    , "group": "3"},
+				{"command": "wrapTagAttribs.unwrapStyle"  , "group": "3"}
 			]
 		},
 		"submenus": [

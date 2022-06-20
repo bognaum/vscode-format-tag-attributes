@@ -28,8 +28,6 @@ function wrapAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: an
 			newCode += m.baseIndent + m[">"];
 
 			edit.replace(m.range, newCode);
-
-			console.log(newCode);
 		} else {
 			vsc.window.showWarningMessage("You need to hover over the opening tag.");
 		}
@@ -52,7 +50,6 @@ function unwrapAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: 
 					newCode = m["<"] + m.tagName + " " + attribStr + m[">"];
 
 				edit.replace(m.range, newCode);
-				console.log(newCode);
 			} else {
 				vsc.window.showWarningMessage("You need to hover over the opening tag.");
 			}
