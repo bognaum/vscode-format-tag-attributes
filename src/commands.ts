@@ -1,5 +1,5 @@
 import * as vsc from 'vscode';
-import getTagRange from './functions/getTagRange';
+import getTagMatch from './functions/getTagMatch';
 
 export {
 	wrapAttribs,
@@ -14,10 +14,13 @@ function wrapAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: an
 	for (let sel of tEditor.selections) {
 		const 
 			doc = tEditor.document,
-			range = getTagRange(doc, sel.start);
-		if (range) {
-			const substr = tEditor.document.getText(range);
-			vsc.window.showInformationMessage(substr);
+			m = getTagMatch(doc, sel.start);
+		if (m) {
+			// vsc.window.showInformationMessage(m.tagStr);
+			vsc.window.showInformationMessage(m.attribCount.toString());
+			for (const attr of m.attribs) {
+				vsc.window.showInformationMessage(attr);
+			}
 		} else {
 			vsc.window.showWarningMessage("You need to hover over the opening tag.");
 		}
