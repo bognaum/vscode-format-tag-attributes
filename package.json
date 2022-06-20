@@ -20,6 +20,15 @@
 	],
 	"main": "./dist/extension.js",
 	"contributes": {
+		"keybindings": [
+			{
+				"mac": "alt+cmd+shift+a",
+				"win": "alt+ctrl+shift+a",
+				"key": "alt+ctrl+shift+a",
+				"command": "wrapTagAttribs.toggleAttribs",
+				"when": "editorTextFocus"
+			}
+		],
 		"commands": [
 			{
 				"command": "wrapTagAttribs.wrapAttribs",

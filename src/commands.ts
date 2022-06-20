@@ -57,7 +57,22 @@ function unwrapAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: 
 }
 
 function toggleAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
-	for (let sel of tEditor.selections) {}
+	for (let sel of tEditor.selections) {
+		const 
+			doc  = tEditor.document,
+			opts = tEditor.options,
+			m = getTagMatch(doc, sel.start);
+			console.log(`m?.spaceAfterName >>`, `'${m?.spaceAfterName}'`);
+			if (m) {
+				if (m.wrapped) {
+					vsc.commands.executeCommand("wrapTagAttribs.unwrapAttribs");
+				} else {
+					vsc.commands.executeCommand("wrapTagAttribs.wrapAttribs");
+				}
+			} else {
+				vsc.window.showWarningMessage("You need to hover over the opening tag.");
+			} 
+	}
 }
 
 function wrapStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {

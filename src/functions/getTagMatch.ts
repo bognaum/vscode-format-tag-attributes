@@ -52,7 +52,9 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 				attribStr = m.groups?.attribs || "",
 				closingBr = m.groups?.B || "",
 				attribArr = attribStr.match(attributesRE) || [],
-				attribDetails = attribArr.map(v => v.match(attrRE));
+				attribDetails = attribArr.map(v => v.match(attrRE)),
+				spaceAfterName = m.groups?.C || "",
+				wrapped = !!spaceAfterName.match("\n");
 			
 			return {
 				match: m,
@@ -71,6 +73,8 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 				givenPos: pos,
 				givenOffset: offset,
 				baseIndent,
+				wrapped,
+				spaceAfterName,
 			};
 		}
 	} else {
