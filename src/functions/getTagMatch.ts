@@ -1,5 +1,13 @@
 import * as vsc from 'vscode';
-import * as RE from "../regexp";
+import * as rawRE from "../regexp";
+
+for (const i in rawRE) {
+	// console.log(i, new RegExp(rawRE[i])); //Ёбаный тайпскрипт ругается
+}
+const 
+	tagRE        = new RegExp(rawRE.tag , "y"),
+	attrRE       = new RegExp(rawRE.attr, ""),
+	attributesRE = new RegExp(rawRE.attr, "g" );
 
 export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 	const
@@ -14,7 +22,6 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 		i --;
 	}
 	if (v && text[i + 1] !== "/") {
-		const tagRE = RE.tag;
 		tagRE.lastIndex = i;
 		// console.log(`text.slice(i) >>`, text.slice(i));
 		const 
@@ -23,24 +30,30 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 			endOffset = b = tagRE.lastIndex,
 			range = new vsc.Range(doc.positionAt(a), doc.positionAt(b));
 		if (m && offset <= tagRE.lastIndex) {
-			const [tagStr, openedBrAndSpace, tagName, attribStr, noUsed, closedBr] = m;
+			// const [tagStr, openedBrAndSpace, tagName, attribStr, noUsed, closedBr] = m;
+			// const {tagName = "", attribs = ""} = m.groups;
+
 			const 
-				attribs = (attribStr || "").match(RE.attribs) || [],
-				attribDetails = attribs.map(v => v.match(RE.attrib));
+				openingBr = m.groups?.A || "",
+				tagName = m.groups?.tagName || "",
+				attribStr = m.groups?.attribs || "",
+				closingBr = m.groups?.B || "",
+				attribArr = attribStr.match(attributesRE) || [],
+				attribDetails = attribArr.map(v => v.match(attrRE));
 			
 			return {
 				match: m,
 				range,
 				startOffset,
 				endOffset,
-				tagStr,
-				openedBrAndSpace, 
+				tagStr: m[0],
+				"<": openingBr, 
 				tagName, 
 				attribStr, 
-				attribs, 
+				attribArr,
 				attribDetails,
-				attribCount: attribs.length,
-				closedBr,
+				attribCount: attribArr.length,
+				">": closingBr,
 				givenDoc: doc,
 				givenPos: pos,
 				givenOffset: offset,

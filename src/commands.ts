@@ -18,7 +18,8 @@ function wrapAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: an
 		if (m) {
 			// vsc.window.showInformationMessage(m.tagStr);
 			vsc.window.showInformationMessage(m.attribCount.toString());
-			for (const attr of m.attribs) {
+			vsc.window.showInformationMessage(m.attribStr);
+			for (const attr of m.attribArr) {
 				vsc.window.showInformationMessage(attr);
 			}
 		} else {
