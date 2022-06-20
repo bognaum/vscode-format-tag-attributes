@@ -13,7 +13,7 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 	const
 		offset = doc.offsetAt(pos),
 		text = doc.getText();
-	let i = offset, v = "", a = 0, b = 0;
+	let i = offset, baseIndent = "", v = "", vv = "", a = 0, b = 0;
 	while (v = text[i]) {
 		if (v === "<") {
 			a = i;
@@ -21,8 +21,22 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 		}
 		i --;
 	}
-	if (v && text[i + 1] !== "/") {
-		tagRE.lastIndex = i;
+	while (vv = text[i]) {
+		if (vv === "\n") {
+			break;
+		}
+		i --;
+	}
+	i += 1;
+	while (vv = text[i]) {
+		if (![" ", "\t"].includes(vv)) {
+			break;
+		}
+		baseIndent += vv;
+		i ++;
+	}
+	if (v && text[a + 1] !== "/") {
+		tagRE.lastIndex = a;
 		// console.log(`text.slice(i) >>`, text.slice(i));
 		const 
 			m = text.match(tagRE),
@@ -57,6 +71,7 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 				givenDoc: doc,
 				givenPos: pos,
 				givenOffset: offset,
+				baseIndent,
 			};
 		}
 	} else {

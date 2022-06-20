@@ -10,8 +10,6 @@ import {
 } from "./commands";
 
 export function activate(context: vsc.ExtensionContext) {
-	
-	console.log('Congratulations, your extension "wrap-tag-attributes" is now active!');
 	const commands = [
 		vsc.commands.registerTextEditorCommand ("wrapTagAttribs.wrapAttribs"  , wrapAttribs  ),
 		vsc.commands.registerTextEditorCommand ("wrapTagAttribs.unwrapAttribs", unwrapAttribs),
