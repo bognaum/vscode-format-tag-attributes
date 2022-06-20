@@ -62,7 +62,6 @@ function toggleAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: 
 			doc  = tEditor.document,
 			opts = tEditor.options,
 			m = getTagMatch(doc, sel.start);
-			console.log(`m?.spaceAfterName >>`, `'${m?.spaceAfterName}'`);
 			if (m) {
 				if (m.wrapped) {
 					vsc.commands.executeCommand("wrapTagAttribs.unwrapAttribs");

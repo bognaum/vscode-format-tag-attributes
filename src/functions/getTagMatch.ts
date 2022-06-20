@@ -51,7 +51,7 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 				tagName = m.groups?.tagName || "",
 				attribStr = m.groups?.attribs || "",
 				closingBr = m.groups?.B || "",
-				attribArr = attribStr.match(attributesRE) || [],
+				attribArr = attribStr.match(attributesRE)?.map(v => v.trim()) || [],
 				attribDetails = attribArr.map(v => v.match(attrRE)),
 				spaceAfterName = m.groups?.C || "",
 				wrapped = !!spaceAfterName.match("\n");
