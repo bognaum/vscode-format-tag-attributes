@@ -1,5 +1,9 @@
 import * as vsc from 'vscode';
 import * as rawRE from "../regexp";
+import {
+	getBaseIndent,
+	getTagStartOffset,
+} from "./base";
 
 for (const i in rawRE) {
 	// console.log(i, new RegExp(rawRE[i])); //Ёбаный тайпскрипт ругается
@@ -29,14 +33,15 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 					tagName = m.groups?.tagName || "",
 					attribStr = m.groups?.attribs || "",
 					closingBr = m.groups?.B || "",
+					aroundAttribs = attribStr.split(attrRE),
 					attribArr = attribStr.match(attributesRE)?.map(v => v.trim()) || [],
-					attribDetails = attribArr.map(v => v.match(attrRE)),
-					spaceAfterName = m.groups?.C || "",
-					splitted = !!spaceAfterName.match("\n");
+					attribDetails = attribArr.map(v => v.match(attributesRE)),
+					spaces = aroundAttribs.filter(v => v.match(/^\s*$/)),
+					splitted = spaces.some(v => v.match(/\n/));
 				const
 					tagStr = m[0],
 					mm = tagStr.match(styleRE);
-				let styleOpts = {};
+				let styleProps = {};
 					if (mm) {
 						const
 							styleAttrStr = mm[0],
@@ -48,7 +53,7 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 								doc.positionAt(styleEndOffset)
 							),
 							quoted = mm.groups?.quoted;
-						styleOpts = {
+						styleProps = {
 							range
 						};
 						if (quoted) {
@@ -56,8 +61,8 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 								quoteType = quoted[0],
 								contentStr = quoted.slice(1, -1);
 							
-							styleOpts = {
-								...styleOpts,
+							styleProps = {
+								...styleProps,
 								quoteType,
 								contentStr,
 							};
@@ -83,43 +88,13 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 					givenOffset,
 					baseIndent,
 					splitted,
-					spaceAfterName,
 				};
 			}
 
 		}
-	} else {
-		// vsc.window.showWarningMessage("No begin");
-	}
+	} 
 	return null;
 }
 
-function getBaseIndent(text: string, offset: number) {
-	let i = offset, v = "", baseIndent = "";
-	while (v = text[i]) {
-		if (v === "\n") {
-			break;
-		}
-		i --;
-	}
-	i += 1;
-	while (v = text[i]) {
-		if (![" ", "\t"].includes(v)) {
-			break;
-		}
-		baseIndent += v;
-		i ++;
-	}
-	return baseIndent;
-}
 
-function getTagStartOffset(text: string, givenOffset: number) {
-	let i = givenOffset, v = "";
-	while (v = text[i]) {
-		if (v === "<") {
-			return i;
-		}
-		i --;
-	}
-	return -1;
-}
+
