@@ -63,7 +63,7 @@ function toggleAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: 
 			opts = tEditor.options,
 			m = getTagMatch(doc, sel.start);
 			if (m) {
-				if (m.wrapped) {
+				if (m.splitted) {
 					vsc.commands.executeCommand("wrapTagAttribs.unwrapAttribs");
 				} else {
 					vsc.commands.executeCommand("wrapTagAttribs.wrapAttribs");

@@ -32,7 +32,7 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 					attribArr = attribStr.match(attributesRE)?.map(v => v.trim()) || [],
 					attribDetails = attribArr.map(v => v.match(attrRE)),
 					spaceAfterName = m.groups?.C || "",
-					wrapped = !!spaceAfterName.match("\n");
+					splitted = !!spaceAfterName.match("\n");
 				const
 					tagStr = m[0],
 					mm = tagStr.match(styleRE);
@@ -82,7 +82,7 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 					givenPos: pos,
 					givenOffset,
 					baseIndent,
-					wrapped,
+					splitted,
 					spaceAfterName,
 				};
 			}
