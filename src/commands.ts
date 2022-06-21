@@ -2,15 +2,15 @@ import * as vsc from 'vscode';
 import getTagMatch from './functions/getTagMatch';
 
 export {
-	wrapAttribs,
-	unwrapAttribs,
+	splitAttribs,
+	joinAttribs,
 	toggleAttribs,
-	wrapStyle,
-	unwrapStyle,
+	splitStyle,
+	joinStyle,
 	toggleStyle,
 };
 
-function wrapAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
+function splitAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {
 		const 
 			doc  = tEditor.document,
@@ -34,7 +34,7 @@ function wrapAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: an
 	}
 }
 
-function unwrapAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
+function joinAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {
 		const 
 				doc  = tEditor.document,
@@ -64,9 +64,9 @@ function toggleAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: 
 			m = getTagMatch(doc, sel.start);
 			if (m) {
 				if (m.splitted) {
-					vsc.commands.executeCommand("wrapTagAttribs.unwrapAttribs");
+					vsc.commands.executeCommand("formatTagAttribs.joinAttribs");
 				} else {
-					vsc.commands.executeCommand("wrapTagAttribs.wrapAttribs");
+					vsc.commands.executeCommand("formatTagAttribs.splitAttribs");
 				}
 			} else {
 				vsc.window.showWarningMessage("You need to hover over the opening tag.");
@@ -74,11 +74,11 @@ function toggleAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: 
 	}
 }
 
-function wrapStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
+function splitStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {}
 }
 
-function unwrapStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
+function joinStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {}
 }
 
