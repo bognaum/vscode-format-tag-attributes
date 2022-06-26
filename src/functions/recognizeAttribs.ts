@@ -37,13 +37,16 @@ export default function recognizeAttribs(tEditor: vsc.TextEditor, range: vsc.Ran
 	const recognized: Recognized = {
 		isSplitted,
 		range: atts.range,
-		getOneLineText() {
+		join() {
 			return atts.arr.join(" ");
 		},
-		getMultiLineText() {
+		split() {
 			return atts.arr.reduce((acc, v) => {
 				return acc += EOL + baseIndent + TAB + v;
 			}, "") + EOL + baseIndent;
+		},
+		toggle () {
+			return this.isSplitted ? this.join() : this.split();
 		},
 	};
 	

@@ -18,42 +18,19 @@ export {
 
 function splitAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {
-		splitJoin(tEditor, edit, sel, "getMultiLineText"); 
+		splitJoin(tEditor, edit, sel, "split"); 
 	}
 }
 
 function joinAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {
-		splitJoin(tEditor, edit, sel, "getOneLineText");
+		splitJoin(tEditor, edit, sel, "join");
 	}
 }
 
 function toggleAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
-	console.log(`args >>`, args);
 	for (let sel of tEditor.selections) {
-		if (sel.isEmpty) {
-			const tag = recognizeTag(tEditor, sel.start);
-			if (tag) {
-				if (tag.isSplitted) {
-					edit.replace(tag.range, tag.getOneLineText());
-				} else {
-					edit.replace(tag.range, tag.getMultiLineText());
-				}
-			} else {
-				vsc.window.showWarningMessage("1 Opening or single tag was not recognized. You need to hover over the opening or single tag.");
-			}
-		} else {
-			const attribs = recognizeAttribs(tEditor, sel);
-			if (attribs) {
-				if (attribs.isSplitted) {
-					edit.replace(attribs.range, attribs.getOneLineText());
-				} else {
-					edit.replace(attribs.range, attribs.getMultiLineText());
-				}
-			} else {
-				vsc.window.showWarningMessage("2 Opening or single tag was not recognized. You need to hover over the opening or single tag.");
-			}
-		}
+		splitJoin(tEditor, edit, sel, "toggle");
 	}
 }
 
@@ -79,7 +56,7 @@ function splitJoin(
 		tEditor: vsc.TextEditor, 
 		edit: vsc.TextEditorEdit, 
 		sel: vsc.Selection, 
-		methodName: "getOneLineText"|"getMultiLineText"
+		methodName: "split"|"join"|"toggle"
 ) {
 	if (sel.isEmpty) {
 		const tag = recognizeTag(tEditor, sel.start);

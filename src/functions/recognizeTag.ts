@@ -48,19 +48,22 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 				const recognized: Recognized = {
 					isSplitted,
 					range: t.range,
-					getOneLineText() {
+					join() {
 						const 
 							attribStr = t.attribs.arr.join(" "),
 							text = t["<"] + t.tagName + " " + attribStr + t[">"];
 						return text;
 					},
-					getMultiLineText() {
+					split() {
 						let text = t["<"] + t.tagName + EOL;
 						for (const attr of t.attribs.arr) {
 							text += baseIndent + TAB + attr + EOL;
 						}
 						text += baseIndent + t[">"];
 						return text;
+					},
+					toggle () {
+						return this.isSplitted ? this.join() : this.split();
 					},
 				};
 				return recognized;
