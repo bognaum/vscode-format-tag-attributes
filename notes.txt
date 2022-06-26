@@ -7,3 +7,21 @@ Transtagformer
 Format Tag
 Transform Tag
 Split Tag
+
+let config = vscode.workspace.getConfiguration('splitHTMLAttributes', editor.document.uri)
+"configuration": {
+	"title": "Split HTML Attributes",
+	"properties": {
+		"splitHTMLAttributes.tabSize": {
+			"type": "number",
+			"default": 2,
+			"description": "Number of spaces for indentation.",
+			"scope": "resource"
+		}
+	}
+}
+/\s+(?=([^"]*"[^"]*")*[^"]*$)/g
+
+EOL  = [0, "\n", "\r\n"][doc.eol];
+TAB  = opts.insertSpaces && typeof opts.tabSize === "number" ? 
+				" ".repeat(opts.tabSize) : "\t";
