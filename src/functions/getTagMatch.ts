@@ -2,7 +2,6 @@ import * as vsc from 'vscode';
 import * as rawRE from "../regexp";
 import {
 	getBaseIndent,
-	// getTagStartOffset,
 } from "./base";
 
 for (const i in rawRE) {

@@ -3,7 +3,6 @@ import * as rawRE from "../regexp";
 import Recognized from '../recognized.interface';
 import {
 	getBaseIndent,
-	// getTagStartOffset,
 } from "./base";
 
 export default function recognizeAttribs(tEditor: vsc.TextEditor, range: vsc.Range) {
