@@ -63,14 +63,14 @@ function changeAttribs(
 		if (tag) {
 			edit.replace(tag.range, tag[methodName]());
 		} else {
-			vsc.window.showWarningMessage("3 Opening or single tag was not recognized. You need to hover over the opening or single tag.");
+			vsc.window.showWarningMessage("Tag was not recognized. You need to hover over the opening or single tag.");
 		}
 	} else {
 		const attribs = recognizeAttribs(tEditor, sel);
 		if (attribs) {
 			edit.replace(attribs.range, attribs[methodName]());
 		} else {
-			vsc.window.showWarningMessage("4 Opening or single tag was not recognized. You need to hover over the opening or single tag.");
+			vsc.window.showWarningMessage("Attributes were not recognized. You need to select appropriate attributes.");
 		}
 	}
 }
