@@ -52,6 +52,7 @@
 			},
 			{
 				"command": "formatTagAttribs.toggleStyle",
+				"icon": "IMG/icon.jpg",
 				"title": "Format Tag Attributes: Toggle - Style"
 			}
 		],
