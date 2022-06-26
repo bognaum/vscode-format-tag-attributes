@@ -1,5 +1,4 @@
 import * as vsc from 'vscode';
-import getTagMatch from './functions/getTagMatch';
 import recognizeTag from './functions/recognizeTag';
 import recognizeAttribs from './functions/recognizeAttribs';
 import recognizeStyle from './functions/recognizeStyle';
