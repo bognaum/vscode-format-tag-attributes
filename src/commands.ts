@@ -18,19 +18,19 @@ export {
 
 function splitAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {
-		splitJoin(tEditor, edit, sel, "split"); 
+		changeAttribs(tEditor, edit, sel, "split"); 
 	}
 }
 
 function joinAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {
-		splitJoin(tEditor, edit, sel, "join");
+		changeAttribs(tEditor, edit, sel, "join");
 	}
 }
 
 function toggleAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {
-		splitJoin(tEditor, edit, sel, "toggle");
+		changeAttribs(tEditor, edit, sel, "toggle");
 	}
 }
 
@@ -52,7 +52,7 @@ function toggleStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: an
 	for (let sel of tEditor.selections) {}
 }
 
-function splitJoin(
+function changeAttribs(
 		tEditor: vsc.TextEditor, 
 		edit: vsc.TextEditorEdit, 
 		sel: vsc.Selection, 
