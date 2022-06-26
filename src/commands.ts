@@ -2,6 +2,10 @@ import * as vsc from 'vscode';
 import getTagMatch from './functions/getTagMatch';
 import recognizeTag from './functions/recognizeTag';
 import recognizeAttribs from './functions/recognizeAttribs';
+import {
+	getBaseIndent,
+	// getTagStartOffset,
+} from "./functions/base";
 
 export {
 	splitAttribs,
@@ -14,65 +18,42 @@ export {
 
 function splitAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {
-		const 
-			doc  = tEditor.document,
-			opts = tEditor.options,
-			EOL  = [0, "\n", "\r\n"][doc.eol],
-			IND  = opts.insertSpaces && typeof opts.tabSize === "number" ? 
-				" ".repeat(opts.tabSize) : "\t",
-			m = getTagMatch(doc, sel.start);
-		if (m) {
-			// vsc.window.showInformationMessage(m.tagStr);
-			let newCode = m["<"] + m.tagName + EOL;
-			for (const attr of m.attribArr) {
-				newCode += m.baseIndent + IND + attr + EOL;
-			}
-			newCode += m.baseIndent + m[">"];
-
-			edit.replace(m.range, newCode);
-		} else {
-			vsc.window.showWarningMessage("You need to hover over the opening tag.");
-		}
+		splitJoin(tEditor, edit, sel, "getMultiLineText"); 
 	}
 }
 
 function joinAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
 	for (let sel of tEditor.selections) {
-		const 
-				doc  = tEditor.document,
-				opts = tEditor.options,
-				EOL  = [0, "\n", "\r\n"][doc.eol],
-				IND  = opts.insertSpaces && typeof opts.tabSize === "number" ? 
-					" ".repeat(opts.tabSize) : "\t",
-				m = getTagMatch(doc, sel.start);
-			if (m) {
-				// vsc.window.showInformationMessage(m.tagStr);
-				const 
-					attribStr = m.attribArr.map(v => v.trim()).join(" "),
-					newCode = m["<"] + m.tagName + " " + attribStr + m[">"];
-
-				edit.replace(m.range, newCode);
-			} else {
-				vsc.window.showWarningMessage("You need to hover over the opening tag.");
-			}
+		splitJoin(tEditor, edit, sel, "getOneLineText");
 	}
 }
 
 function toggleAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
+	console.log(`args >>`, args);
 	for (let sel of tEditor.selections) {
-		const 
-			doc  = tEditor.document,
-			opts = tEditor.options,
-			m = getTagMatch(doc, sel.start);
-			if (m) {
-				if (m.splitted) {
-					vsc.commands.executeCommand("formatTagAttribs.joinAttribs");
+		if (sel.isEmpty) {
+			const tag = recognizeTag(tEditor, sel.start);
+			if (tag) {
+				if (tag.isSplitted) {
+					edit.replace(tag.range, tag.getOneLineText());
 				} else {
-					vsc.commands.executeCommand("formatTagAttribs.splitAttribs");
+					edit.replace(tag.range, tag.getMultiLineText());
 				}
 			} else {
-				vsc.window.showWarningMessage("You need to hover over the opening tag.");
-			} 
+				vsc.window.showWarningMessage("1 Opening or single tag was not recognized. You need to hover over the opening or single tag.");
+			}
+		} else {
+			const attribs = recognizeAttribs(tEditor, sel);
+			if (attribs) {
+				if (attribs.isSplitted) {
+					edit.replace(attribs.range, attribs.getOneLineText());
+				} else {
+					edit.replace(attribs.range, attribs.getMultiLineText());
+				}
+			} else {
+				vsc.window.showWarningMessage("2 Opening or single tag was not recognized. You need to hover over the opening or single tag.");
+			}
+		}
 	}
 }
 
@@ -81,9 +62,38 @@ function splitStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any
 }
 
 function joinStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
+	vsc.window.showQuickPick(["aaa", "bbb", "ccc"]).then((v) => {
+		vsc.window.showInformationMessage(v || "fail");
+	});
 	for (let sel of tEditor.selections) {}
 }
 
 function toggleStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
+	vsc.window.showInputBox().then((v) => {
+		vsc.window.showInformationMessage(v || "fail");
+	});
 	for (let sel of tEditor.selections) {}
+}
+
+function splitJoin(
+		tEditor: vsc.TextEditor, 
+		edit: vsc.TextEditorEdit, 
+		sel: vsc.Selection, 
+		methodName: "getOneLineText"|"getMultiLineText"
+) {
+	if (sel.isEmpty) {
+		const tag = recognizeTag(tEditor, sel.start);
+		if (tag) {
+			edit.replace(tag.range, tag[methodName]());
+		} else {
+			vsc.window.showWarningMessage("3 Opening or single tag was not recognized. You need to hover over the opening or single tag.");
+		}
+	} else {
+		const attribs = recognizeAttribs(tEditor, sel);
+		if (attribs) {
+			edit.replace(attribs.range, attribs[methodName]());
+		} else {
+			vsc.window.showWarningMessage("4 Opening or single tag was not recognized. You need to hover over the opening or single tag.");
+		}
+	}
 }

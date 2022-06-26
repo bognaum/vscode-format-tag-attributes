@@ -1,6 +1,6 @@
 export {
 	getBaseIndent,
-	getTagStartOffset,
+	// getTagStartOffset,
 };
 
 function getBaseIndent(text: string, offset: number) {
@@ -20,15 +20,4 @@ function getBaseIndent(text: string, offset: number) {
 		i ++;
 	}
 	return baseIndent;
-}
-
-function getTagStartOffset(text: string, givenOffset: number) {
-	let i = givenOffset, v = "";
-	while (v = text[i]) {
-		if (v === "<") {
-			return i;
-		}
-		i --;
-	}
-	return -1;
 }

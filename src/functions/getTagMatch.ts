@@ -2,7 +2,7 @@ import * as vsc from 'vscode';
 import * as rawRE from "../regexp";
 import {
 	getBaseIndent,
-	getTagStartOffset,
+	// getTagStartOffset,
 } from "./base";
 
 for (const i in rawRE) {
@@ -98,3 +98,13 @@ export default function getTagMatch (doc: vsc.TextDocument, pos: vsc.Position) {
 
 
 
+function getTagStartOffset(text: string, givenOffset: number) {
+	let i = givenOffset, v = "";
+	while (v = text[i]) {
+		if (v === "<") {
+			return i;
+		}
+		i --;
+	}
+	return -1;
+}
