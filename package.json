@@ -2,6 +2,7 @@
 	"name": "format-tag-attributes",
 	"displayName": "Formats tag attributes into one or many lines.",
 	"description": "It formats tag attributes to one lite or to many lines. ",
+	"icon": "IMG/icon-03.png",
 	"publisher": "Bognaum",
 	"version": "0.0.1",
 	"engines": {
