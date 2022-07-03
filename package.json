@@ -5,6 +5,10 @@
 	"icon": "IMG/icon-03.png",
 	"publisher": "Bognaum",
 	"version": "0.0.1",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/bognaum/vscode-format-tag-attributes.git"
+	},
 	"engines": {
 		"vscode": "^1.68.0"
 	},
