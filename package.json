@@ -23,10 +23,13 @@
 	"contributes": {
 		"keybindings": [
 			{
-				"mac": "alt+cmd+shift+a",
-				"win": "alt+ctrl+shift+a",
 				"key": "alt+ctrl+shift+a",
 				"command": "formatTagAttribs.toggleAttribs",
+				"when": "editorTextFocus"
+			},
+			{
+				"key": "alt+ctrl+shift+s",
+				"command": "formatTagAttribs.toggleStyle",
 				"when": "editorTextFocus"
 			}
 		],
