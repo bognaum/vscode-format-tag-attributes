@@ -86,14 +86,17 @@ function changeStyle(
 		if (style) {
 			edit.replace(style.range, style[methodName]());
 		} else {
-			vsc.window.showWarningMessage("A style attribute was not recognized. You need to hover over the style attribute.");
+			const tag = recognizeTag(tEditor, sel.start);
+			if (tag?.stileStartPos) {
+				const style = recognizeStyle(tEditor, tag.stileStartPos);
+				if (style) {
+					edit.replace(style.range, style[methodName]());
+				} else {
+					vsc.window.showErrorMessage("Error. Stile wos not recognized.")
+				}
+			} else {
+				vsc.window.showWarningMessage("A style attribute was not recognized. You need to hover over the style attribute.");
+			}
 		}
-	} else {
-		const attribs = recognizeAttribs(tEditor, sel);
-		if (attribs) {
-			edit.replace(attribs.range, attribs[methodName]());
-		} else {
-			vsc.window.showWarningMessage("Attributes were not recognized. You need to select appropriate attributes.");
-		}
-	}
+	} else {}
 }
