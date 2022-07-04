@@ -1,6 +1,7 @@
 import * as vsc from 'vscode';
 import * as rawRE from "../regexp";
 import Recognized from '../recognized.interface';
+import recognizeStyle from './recognizeStyle';
 import {
 	getBaseIndent,
 } from "./base";
@@ -35,6 +36,9 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 					stileStartPos = styleSubOffset 
 						? doc.positionAt(startOffset + styleSubOffset)
 						: null,
+					recognizedStyle = stileStartPos 
+						? recognizeStyle(tEditor, stileStartPos) 
+						: null,
 					isSplitted = !!attribStr.split(attributeRE).join("").match("\n");
 				const t = {
 					allTagStr: m[0],
@@ -46,6 +50,7 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 						str: attribStr,
 						arr: attribStr.match(attributesRE)?.map(v => v.trim()) || [],
 					},
+					style: recognizedStyle,
 					">": m.groups?.B || "",
 					isSplitted,
 				};
@@ -53,7 +58,7 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 				const recognized: Recognized = {
 					isSplitted,
 					range: t.range,
-					stileStartPos,
+					style: t.style,
 					join() {
 						const 
 							attribStr = t.attribs.arr.join(" "),

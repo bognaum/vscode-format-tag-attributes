@@ -87,13 +87,8 @@ function changeStyle(
 			edit.replace(style.range, style[methodName]());
 		} else {
 			const tag = recognizeTag(tEditor, sel.start);
-			if (tag?.stileStartPos) {
-				const style = recognizeStyle(tEditor, tag.stileStartPos);
-				if (style) {
-					edit.replace(style.range, style[methodName]());
-				} else {
-					vsc.window.showErrorMessage("Error. Stile wos not recognized.")
-				}
+			if (tag?.style) {
+				edit.replace(tag.style.range, tag.style[methodName]());
 			} else {
 				vsc.window.showWarningMessage("A style attribute was not recognized. You need to hover over the style attribute.");
 			}
