@@ -4,6 +4,8 @@ import Recognized from '../recognized.interface';
 import recognizeStyle from './recognizeStyle';
 import {
 	getBaseIndent,
+	offsetRight,
+	offsetLeft,
 } from "./base";
 
 export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position) {
@@ -22,7 +24,7 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 			if (startOffset <= givenOffset && givenOffset <= endOffset) {
 				const 
 					opts = tEditor.options,
-					EOL  = [0, "\n", "\r\n"][doc.eol],
+					EOL  = ["", "\n", "\r\n"][doc.eol],
 					TAB  = opts.insertSpaces && typeof opts.tabSize === "number" ? 
 						" ".repeat(opts.tabSize) : "\t",
 					baseIndent = getBaseIndent(doc.getText(), startOffset);
@@ -61,16 +63,21 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 						return recognizedStyle;
 					},
 					join() {
-						const 
-							attribStr = t.attribs.arr.join(" "),
-							text = t["<"] + t.tagName + " " + attribStr + t[">"];
+						const attribStr = offsetLeft(
+							t.attribs.arr.join(" "), 
+							EOL, 
+							baseIndent, 
+							TAB
+						);
+						const text = t["<"] + t.tagName + " " + attribStr + t[">"];
 						return text;
 					},
 					split() {
 						let text = t["<"] + t.tagName + EOL;
 						for (const attr of t.attribs.arr) {
-							text += baseIndent + TAB + attr + EOL;
+							text += baseIndent + attr + EOL;
 						}
+						text = offsetRight(text, EOL, baseIndent, TAB);
 						text += baseIndent + t[">"];
 						return text;
 					},

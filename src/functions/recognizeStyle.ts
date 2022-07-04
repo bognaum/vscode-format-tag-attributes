@@ -3,6 +3,8 @@ import * as rawRE from "../regexp";
 import Recognized from '../recognized.interface';
 import {
 	getBaseIndent,
+	offsetRight,
+	offsetLeft,
 } from "./base";
 const 
 	styleRE      = new RegExp(rawRE.style, "y");
@@ -40,17 +42,23 @@ export default function recognizeStyle (tEditor: vsc.TextEditor, pos: vsc.Positi
 					isSplitted,
 					range,
 					split() {
+						const propStr = offsetRight(
+							cssRulesArr.join("; " + EOL + baseIndent),
+							EOL, baseIndent, TAB
+						);
 						return (
 							'style=' + quote + EOL +
-							baseIndent + TAB + cssRulesArr.join("; " + EOL + baseIndent + TAB) + EOL+
+							baseIndent + TAB + propStr + EOL+
 							baseIndent + quote
 						);
 					},
 					join() {
+						const propStr = offsetLeft(
+							cssRulesArr.join("; "),
+							EOL, baseIndent, TAB
+						);
 						return (
-							'style=' + quote + 
-							cssRulesArr.join("; ") + 
-							quote
+							'style=' + quote + propStr + quote
 						);
 					},
 					toggle() {

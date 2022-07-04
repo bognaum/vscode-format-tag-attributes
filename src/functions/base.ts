@@ -1,6 +1,7 @@
 export {
 	getBaseIndent,
-	// getTagStartOffset,
+	offsetRight,
+	offsetLeft,
 };
 
 function getBaseIndent(text: string, offset: number) {
@@ -20,4 +21,12 @@ function getBaseIndent(text: string, offset: number) {
 		i ++;
 	}
 	return baseIndent;
+}
+
+function offsetRight(text: string, eol:string, baseInd: string, tab: string): string {
+	return text.replace(new RegExp(eol + baseInd, "g"), eol + baseInd + tab);
+}
+
+function offsetLeft(text: string, eol:string, baseInd: string, tab: string): string {
+	return text.replace(new RegExp(eol + baseInd + tab, "g"), eol + baseInd);
 }
