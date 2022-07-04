@@ -1,7 +1,8 @@
 import * as vsc from 'vscode';
 import recognizeTag from './functions/recognizeTag';
-import recognizeAttribs from './functions/recognizeAttribs';
+import recognizeTags from './functions/recognizeTags';
 import recognizeStyle from './functions/recognizeStyle';
+import recognizeStyles from './functions/recognizeStyles';
 import {
 	getBaseIndent,
 	// getTagStartOffset,
@@ -66,11 +67,16 @@ function changeAttribs(
 			vsc.window.showWarningMessage("Tag was not recognized. You need to hover over the opening or single tag.");
 		}
 	} else {
-		const attribs = recognizeAttribs(tEditor, sel);
-		if (attribs) {
-			edit.replace(attribs.range, attribs[methodName]());
-		} else {
-			vsc.window.showWarningMessage("Attributes were not recognized. You need to select appropriate attributes.");
+		const tags = recognizeTags(tEditor, sel);
+		console.log(`tags >>`, tags);
+		if (tags.length) {
+			const status = tags[0].isSplitted;
+			tags.forEach(tag => {
+				const 
+					range = tag.range,
+					newText = status ? tag.join() : tag.split();
+				edit.replace(range, newText);
+			});
 		}
 	}
 }
@@ -95,5 +101,16 @@ function changeStyle(
 				vsc.window.showWarningMessage("A style attribute was not recognized. You need to hover over the style attribute.");
 			}
 		}
-	} else {}
+	} else {
+		const styles = recognizeStyles(tEditor, sel);
+		if (styles.length) {
+			const status = styles[0].isSplitted;
+			for (const style of styles) {
+				const 
+					range = style.range,
+					newText = status ? style.join() : style.split();
+				edit.replace(range, newText);
+			}
+		} else {}
+	}
 }
