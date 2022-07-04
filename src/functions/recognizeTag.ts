@@ -31,14 +31,6 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 					attributeRE  = new RegExp(rawRE.attrX, "" ),
 					styleRE      = new RegExp(rawRE.style, ""),
 					attribStr = m.groups?.attribs || "",
-					allTagStr = m[0],
-					styleSubOffset = m[0].match(styleRE)?.index,
-					stileStartPos = styleSubOffset 
-						? doc.positionAt(startOffset + styleSubOffset)
-						: null,
-					recognizedStyle = stileStartPos 
-						? recognizeStyle(tEditor, stileStartPos) 
-						: null,
 					isSplitted = !!attribStr.split(attributeRE).join("").match("\n");
 				const t = {
 					allTagStr: m[0],
@@ -50,7 +42,6 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 						str: attribStr,
 						arr: attribStr.match(attributesRE)?.map(v => v.trim()) || [],
 					},
-					style: recognizedStyle,
 					">": m.groups?.B || "",
 					isSplitted,
 				};
@@ -58,7 +49,17 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 				const recognized: Recognized = {
 					isSplitted,
 					range: t.range,
-					style: t.style,
+					get style() {
+						const 
+							styleSubOffset = t.allTagStr.match(styleRE)?.index,
+							stileStartPos = styleSubOffset 
+								? doc.positionAt(startOffset + styleSubOffset)
+								: null,
+							recognizedStyle = stileStartPos 
+								? recognizeStyle(tEditor, stileStartPos) 
+								: null;
+						return recognizedStyle;
+					},
 					join() {
 						const 
 							attribStr = t.attribs.arr.join(" "),
