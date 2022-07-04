@@ -68,7 +68,6 @@ function changeAttribs(
 		}
 	} else {
 		const tags = recognizeTags(tEditor, sel);
-		console.log(`tags >>`, tags);
 		if (tags.length) {
 			const status = tags[0].isSplitted;
 			tags.forEach(tag => {
