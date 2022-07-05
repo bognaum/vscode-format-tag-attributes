@@ -74,10 +74,10 @@ export default function recognizeTag(tEditor: vsc.TextEditor, pos: vsc.Position)
 					},
 					split() {
 						let text = t["<"] + t.tagName + EOL;
-						for (const attr of t.attribs.arr) {
-							text += baseIndent + attr + EOL;
-						}
-						text = offsetRight(text, EOL, baseIndent, TAB);
+						text += baseIndent + TAB + offsetRight(
+							t.attribs.arr.join(EOL + baseIndent), 
+							EOL, baseIndent, TAB
+						) + EOL;
 						text += baseIndent + t[">"];
 						return text;
 					},
