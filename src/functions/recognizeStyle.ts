@@ -6,8 +6,7 @@ import {
 	offsetRight,
 	offsetLeft,
 } from "./base";
-const 
-	styleRE      = new RegExp(rawRE.style, "y");
+const styleRE = new RegExp(rawRE.style, "y");
 
 export default function recognizeStyle (tEditor: vsc.TextEditor, pos: vsc.Position) {
 	const
