@@ -2,7 +2,7 @@ import * as vsc from 'vscode';
 import Recognized from './recognized.interface';
 import recognizeTag from './functions/recognizeTag';
 import recognizeTags from './functions/recognizeTags';
-import recognizeStyle from './functions/recognizeStyle';
+import recognizeStyleInTag from './functions/recognizeStyleInTag';
 import recognizeStyles from './functions/recognizeStyles';
 
 export {
@@ -25,7 +25,7 @@ const
 		fullSel : recognizeTags,
 	},
 	toStyle: RecognizeCallbacks = {
-		emptySel: recognizeStyle,
+		emptySel: recognizeStyleInTag,
 		fullSel : recognizeStyles
 	},
 	make = {
