@@ -1,9 +1,9 @@
 import * as vsc from 'vscode';
-import Recognized from './recognized.interface';
-import recognizeTag from './functions/recognizeTag';
-import recognizeTags from './functions/recognizeTags';
+import Recognized          from './recognized.interface';
+import recognizeTag        from './functions/recognizeTag';
+import recognizeTags       from './functions/recognizeTags';
 import recognizeStyleInTag from './functions/recognizeStyleInTag';
-import recognizeStyles from './functions/recognizeStyles';
+import recognizeStyles     from './functions/recognizeStyles';
 
 export {
 	splitAttribs,
