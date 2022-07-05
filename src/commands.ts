@@ -1,12 +1,9 @@
 import * as vsc from 'vscode';
+import Recognized from './recognized.interface';
 import recognizeTag from './functions/recognizeTag';
 import recognizeTags from './functions/recognizeTags';
 import recognizeStyle from './functions/recognizeStyle';
 import recognizeStyles from './functions/recognizeStyles';
-import {
-	getBaseIndent,
-	// getTagStartOffset,
-} from "./functions/base";
 
 export {
 	splitAttribs,
@@ -17,99 +14,78 @@ export {
 	toggleStyle,
 };
 
+interface RecognizeCallbacks {
+	emptySel: (a: vsc.TextEditor, b: vsc.Position) =>  Recognized|null;
+	fullSel:  (a: vsc.TextEditor, b: vsc.Range)    => (Recognized|null)[];
+}
+
+const 
+	toAttrs: RecognizeCallbacks = {
+		emptySel: recognizeTag,
+		fullSel : recognizeTags,
+	},
+	toStyle: RecognizeCallbacks = {
+		emptySel: recognizeStyle,
+		fullSel : recognizeStyles
+	},
+	make = {
+		get split () {return true ;},
+		get join  () {return false;},
+		get toggle() {return null ;},
+	};
+
 function splitAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
-	for (let sel of tEditor.selections) {
-		changeAttribs(tEditor, edit, sel, "split"); 
-	}
+	change(toAttrs, {status: make["split"]}, tEditor, edit);
 }
 
 function joinAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
-	for (let sel of tEditor.selections) {
-		changeAttribs(tEditor, edit, sel, "join");
-	}
+	change(toAttrs, {status: make["join"]}, tEditor, edit);
 }
 
 function toggleAttribs(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
-	for (let sel of tEditor.selections) {
-		changeAttribs(tEditor, edit, sel, "toggle");
-	}
+	change(toAttrs, {status: make["toggle"]}, tEditor, edit);
 }
 
 function splitStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
-	for (let sel of tEditor.selections) {
-		changeStyle(tEditor, edit, sel, "split");
-	}
+	change(toStyle, {status: make["split"]}, tEditor, edit);
 }
 
 function joinStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
-	for (let sel of tEditor.selections) {
-		changeStyle(tEditor, edit, sel, "join");
-	}
+	change(toStyle, {status: make["join"]}, tEditor, edit);
 }
 
 function toggleStyle(tEditor: vsc.TextEditor, edit: vsc.TextEditorEdit, args: any[]) {
-	for (let sel of tEditor.selections) {
-		changeStyle(tEditor, edit, sel, "toggle");
+	change(toStyle, {status: make["toggle"]}, tEditor, edit);
+}
+
+
+function change(
+	cbs: RecognizeCallbacks,
+	opts      : {status: null|boolean},
+	tEditor   : vsc.TextEditor,
+	edit      : vsc.TextEditorEdit
+): void {
+	const subjects = recognizeThe(cbs, tEditor);
+	for (const subj of subjects) {
+		opts.status = opts.status ?? subj.isSplitted;
+		const newText = opts.status ? subj.join() : subj.split();
+		edit.replace(subj.range, newText);
 	}
 }
 
-function changeAttribs(
-		tEditor: vsc.TextEditor, 
-		edit: vsc.TextEditorEdit, 
-		sel: vsc.Selection, 
-		methodName: "split"|"join"|"toggle"
-) {
-	if (sel.isEmpty) {
-		const tag = recognizeTag(tEditor, sel.start);
-		if (tag) {
-			edit.replace(tag.range, tag[methodName]());
+function recognizeThe(
+	cbs: RecognizeCallbacks,
+	tEditor   : vsc.TextEditor
+): Recognized[] {
+	return tEditor.selections.map(sel => {
+		if (sel.isEmpty) {
+			return cbs.emptySel(tEditor, sel.active);
 		} else {
-			vsc.window.showWarningMessage("Tag was not recognized. You need to hover over the opening or single tag.");
+			return cbs.fullSel(tEditor, sel);
 		}
-	} else {
-		const tags = recognizeTags(tEditor, sel);
-		if (tags.length) {
-			const status = tags[0].isSplitted;
-			tags.forEach(tag => {
-				const 
-					range = tag.range,
-					newText = status ? tag.join() : tag.split();
-				edit.replace(range, newText);
-			});
-		}
-	}
-}
+	}).flat().filter(fn);
 
-function changeStyle(
-	tEditor: vsc.TextEditor, 
-	edit: vsc.TextEditorEdit, 
-	sel: vsc.Selection, 
-	methodName: "split"|"join"|"toggle"
-) {
-	if (sel.isEmpty) {
-		const style = recognizeStyle(tEditor, sel.start);
-		if (style) {
-			edit.replace(style.range, style[methodName]());
-		} else {
-			const 
-				tag = recognizeTag(tEditor, sel.start),
-				style = tag?.style;
-			if (style) {
-				edit.replace(style.range, style[methodName]());
-			} else {
-				vsc.window.showWarningMessage("A style attribute was not recognized. You need to hover over the style attribute.");
-			}
-		}
-	} else {
-		const styles = recognizeStyles(tEditor, sel);
-		if (styles.length) {
-			const status = styles[0].isSplitted;
-			for (const style of styles) {
-				const 
-					range = style.range,
-					newText = status ? style.join() : style.split();
-				edit.replace(range, newText);
-			}
-		} else {}
+	function fn(v: Recognized|null): v is Recognized {
+		return !!v;
 	}
 }
