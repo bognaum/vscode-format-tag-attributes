@@ -29,8 +29,8 @@ const
 		fullSel : recognizeStyles
 	},
 	make = {
-		get split () {return true ;},
-		get join  () {return false;},
+		get split () {return false;},
+		get join  () {return true ;},
 		get toggle() {return null ;},
 	};
 
