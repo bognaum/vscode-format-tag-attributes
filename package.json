@@ -4,7 +4,7 @@
 	"description": "Builds each attribute of the tag on a new line or in one line.",
 	"icon": "IMG/icon-04.png",
 	"publisher": "Bognaum",
-	"version": "1.0.0",
+	"version": "1.0.1",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/bognaum/vscode-format-tag-attributes.git"
